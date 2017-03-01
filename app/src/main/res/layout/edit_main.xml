@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/edit_dialog_layout"
+    android:paddingLeft="10dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:paddingRight="10dp">
+    <TextView
+        android:id="@+id/edit_dialog_message"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:text="Artikelname"/>
+    <EditText
+        android:id="@+id/input_artikel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:text="Artikel"><requestFocus/></EditText>
+    <EditText
+        android:id="@+id/input_anzahl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:text="Menge" />
+    <menu android:id="@+id/einheiten">
+        <item android:id="@+id/stueck">Stück</item>
+        <item android:id="@+id/kg">Kg</item>
+        <item android:id="@+id/liter">Liter</item>
+    </menu>
+
+
+</LinearLayout>

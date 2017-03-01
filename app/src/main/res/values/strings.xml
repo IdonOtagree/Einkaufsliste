@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SuperEinkaufsList</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_speichern">Liste speichern</string>
+    <string name="action_laden">Liste laden</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="input_anzahl">Anzhal</string>
+    <string name="input_artikel">Artikel</string>
+    <string name="kg">Kg</string>
+    <string name="help">help</string>
+</resources>
