@@ -1,35 +1,44 @@
 package einkaufsliste.app;
 
-        import android.content.DialogInterface;
-        import android.os.Bundle;
-        import android.support.design.widget.FloatingActionButton;
-        import android.support.design.widget.Snackbar;
-        import android.support.v7.app.AlertDialog;
-        import android.text.Selection;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.support.design.widget.NavigationView;
-        import android.support.v4.view.GravityCompat;
-        import android.support.v4.widget.DrawerLayout;
-        import android.support.v7.app.ActionBarDrawerToggle;
-        import android.support.v7.app.AppCompatActivity;
-        import android.support.v7.widget.Toolbar;
-        import android.view.Menu;
-        import android.view.MenuItem;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.EditText;
-        import android.widget.ListAdapter;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.text.Selection;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import java.util.ArrayList;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     List ekliste = new ArrayList<String>();
+    // Tag for Logging.
+    private static final String TAG = "MainActivity";
+    // Global database object.
+    DatabaseHelper myDB;
+    // Mock data
+    String name = "Birne";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +48,21 @@ public class MainActivity extends AppCompatActivity
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+
+                // Grab contents of both EditText fields and transform them to Strings.
+                EditText anzahl = (EditText)findViewById(R.id.input_anzahl);
+                EditText artikel = (EditText)findViewById(R.id.input_artikel);
+                String artikelString = artikel.getText().toString();
+                String anzahlString = anzahl.getText().toString();
+
+                Snackbar.make(view, artikelString + " x " + anzahlString, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 hinzufügen();
+
+                myDB.insertArticle(artikelString);
             }
         });
 
@@ -55,6 +74,18 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Initialization of globally available database object. Pass context of this MainActivity.
+        myDB = new DatabaseHelper(this);
+
+        // We expect a boolean value as response from the method called and save this to a local variable.
+        boolean isInserted = myDB.insertArticle(name);
+        if (isInserted == true) {
+            Log.i(TAG, "Data inserted.");
+        } else {
+
+            Log.i(TAG, "Data NOT inserted.");
+        }
 
     }
     public void hinzufügen(){
