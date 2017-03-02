@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity
 
     // Please provide translation.
     public void hinzufügen(){
+        // Clear current list before you populate it again.
+        ekliste.clear();
         // Get the most recent and complete list of Items from the database.
         List<Article> articleList = myDB.getArticleList();
 
