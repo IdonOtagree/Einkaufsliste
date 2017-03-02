@@ -52,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         contentValues.put(articleName, name);
         contentValues.put(articleAmount, amount);
-        contentValues.put(articleAmount, getUnixTimeStamp());
+        contentValues.put(articleTimeAdded, getUnixTimeStamp());
 
         db.insert(articles, null, contentValues);
     }
