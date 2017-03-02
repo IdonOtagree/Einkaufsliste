@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(articles, null, contentValues);
     }
 
-    // Getting All Shops
+    // Getting All Articles
     public List<Article> getArticleList() {
         List<Article> articleList = new ArrayList<Article>();
         // Select All Query
@@ -72,8 +72,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Article article = new Article();
+                article.setArticleId(Integer.parseInt(cursor.getString(0)));
                 article.setArticleName(cursor.getString(1));
-                article.setArticleAmount(Double.parseDouble(cursor.getString(2)));
+                article.setArticleAmount(Integer.parseInt(cursor.getString(2)));
+                article.setArticleTimeAdded(Long.parseLong(cursor.getString(3)));
                 // Adding contact to list
                 articleList.add(article);
             } while (cursor.moveToNext());

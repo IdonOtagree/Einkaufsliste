@@ -2,9 +2,10 @@ package einkaufsliste.app;
 
 public class Article {
 
+    private int articleId;
     private String articleName;
-    private double articleAmount;
-    private double articleTimeAdded;
+    private int articleAmount;
+    private Long articleTimeAdded;
 
     /**
      * Default constructor
@@ -12,9 +13,21 @@ public class Article {
      * @param
      */
     public Article() {
+        this.articleId = articleId;
         this.articleName = articleName;
         this.articleAmount = articleAmount;
         this.articleTimeAdded = articleTimeAdded;
+    }
+
+    /**
+     * Getter & Setter.
+     * @param articleId
+     */
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
+    }
+    public int getArticleId() {
+        return articleId;
     }
 
     /**
@@ -30,23 +43,24 @@ public class Article {
 
     /**
      * Getter & Setter.
-     * @param articleTimeAdded
+     * @param articleAmount
      */
-    public void setArticleTimeAdded(double articleTimeAdded) {
-        this.articleTimeAdded = articleTimeAdded;
+    public void setArticleAmount(int articleAmount) {
+        this.articleAmount = articleAmount;
     }
-    public double getArticleTimeAdded() {
-        return articleTimeAdded;
+
+    public int getArticleAmount() {
+        return articleAmount;
     }
 
     /**
      * Getter & Setter.
-     * @param amount
+     * @param articleTimeAdded
      */
-    public void setArticleAmount(double amount) {
-        this.articleAmount = amount;
+    public void setArticleTimeAdded(Long articleTimeAdded) {
+        this.articleTimeAdded = articleTimeAdded;
     }
-    public double getArticleAmount() {
-        return articleAmount;
+    public Long getArticleTimeAdded() {
+        return articleTimeAdded;
     }
 }

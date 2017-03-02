@@ -50,11 +50,12 @@ public class MainActivity extends AppCompatActivity
                 String artikelString = artikel.getText().toString();
                 String anzahlString = anzahl.getText().toString();
 
+                myDB.insertArticle(artikelString, Integer.parseInt(anzahlString));
+
                 Snackbar.make(view, anzahlString + " x " + artikelString, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 hinzufügen();
 
-                myDB.insertArticle(artikelString, Integer.parseInt(anzahlString));
             }
         });
 
@@ -71,31 +72,39 @@ public class MainActivity extends AppCompatActivity
         myDB = new DatabaseHelper(this);
 
     }
-    public void hinzufügen(){
 
+    // Please provide translation.
+    public void hinzufügen(){
+        // Get the most recent and complete list of Items from the database.
         List<Article> articleList = myDB.getArticleList();
 
         for(Article article : articleList) {
-            Log.i(TAG, "Articles one by one: " + article.getArticleName());
+            Log.i(TAG, "Articles one by one: " + article.getArticleId() +
+                                         " - " + article.getArticleAmount() +
+                                         " x " + article.getArticleName() +
+                                  " created@ " + article.getArticleTimeAdded());
+            String listItem = article.getArticleAmount() + " x " + article.getArticleName();
+            ekliste.add(listItem);
+            ListAdapter adapter = new ArrayAdapter(getApplicationContext(),R.layout.list_item_ekliste, R.id.list_item_ekliste_textview, ekliste);
+            ListView lv = (ListView)findViewById(R.id.ekliste);
+            lv.setAdapter(adapter);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String ekinfo = (String) parent.getItemAtPosition(position);
+                    Toast.makeText(getApplicationContext(), ekinfo, Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
-        EditText et1 = (EditText)findViewById(R.id.input_artikel);
-        EditText et2 = (EditText)findViewById(R.id.input_anzahl);
-        String s = et1.getText().toString() + "     Anzahl:  " + et2.getText();
-        et2.setText("");
-        et1.setText("");
-        ekliste.add(s);
-        ListAdapter adapter = new ArrayAdapter(getApplicationContext(),R.layout.list_item_ekliste, R.id.list_item_ekliste_textview, ekliste);
-        ListView lv = (ListView)findViewById(R.id.ekliste);
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String ekinfo = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), ekinfo, Toast.LENGTH_LONG).show();
-            }
-        });
-        et1.setSelection(0);
+        // Instantiate both EditText fields.
+        EditText editTextArtikel = (EditText)findViewById(R.id.input_artikel);
+        EditText editTextAnzahl = (EditText)findViewById(R.id.input_anzahl);
+        // Clear contents of both EditText fields.
+        editTextAnzahl.setText("");
+        editTextArtikel.setText("");
+        // Loose focus, maybe?
+        editTextArtikel.setSelection(0);
     }
     @Override
     public void onBackPressed() {
