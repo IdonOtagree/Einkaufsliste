@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     public void hinzufügen(){
         EditText et1 = (EditText)findViewById(R.id.input_artikel);
         EditText et2 = (EditText)findViewById(R.id.input_anzahl);
-        String s = et1.getText().toString() + "     Anzahl:  " + et2.getText();
+        String s =  et2.getText().toString() + " x " + et1.getText().toString();
         et2.setText("");
         et1.setText("");
         ekliste.add(s);
