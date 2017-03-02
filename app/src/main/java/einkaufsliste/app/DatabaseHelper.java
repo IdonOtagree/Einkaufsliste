@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onConfigure(SQLiteDatabase db) {
         // this might only work since SQLite version 3.6.19 and respectively Android 2.2 Froyo.
-        db.execSQL("PRAGMA foreign_keys=ON");
+//        db.execSQL("PRAGMA foreign_keys=ON");
     }
 
 
@@ -59,27 +59,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 artComment + "TEXT, " +
                 artDateAdded + "INTEGER)"
         );
-        db.execSQL("CREATE table " +
-                shoppinglists + " (" +
-                listId + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                listName + " TEXT, " +
-                listPriceSum + " REAL, " +
-                listDateAdded + " INTEGER, " +
-                listFinished + "INTEGER, " +
-                listDateFinished + " INTEGER)"
-        );
+//        db.execSQL("CREATE table " +
+//                shoppinglists + " (" +
+//                listId + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                listName + " TEXT, " +
+//                listPriceSum + " REAL, " +
+//                listDateAdded + " INTEGER, " +
+//                listFinished + "INTEGER, " +
+//                listDateFinished + " INTEGER)"
+//        );
         // Foreign keys??
-        db.execSQL("CREATE table " +
-                shoppinglistItems + " (" +
-                itemId + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                artId + " INTEGER NOT NULL, " +
-                listId + " INTEGER NOT NULL, " +
-                itemAmount + " REAL, " +
-                itemPrice + " REAL, " +
-                itemDateAdded + " INTEGER, " +
-                itemFinished + " INTEGER, " +
-                itemDateFinished + " INTEGER)"
-        );
+//        db.execSQL("CREATE table " +
+//                shoppinglistItems + " (" +
+//                itemId + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                artId + " INTEGER NOT NULL, " +
+//                listId + " INTEGER NOT NULL, " +
+//                itemAmount + " REAL, " +
+//                itemPrice + " REAL, " +
+//                itemDateAdded + " INTEGER, " +
+//                itemFinished + " INTEGER, " +
+//                itemDateFinished + " INTEGER)"
+//        );
     }
 
     @Override

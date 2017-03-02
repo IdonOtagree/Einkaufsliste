@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
                 String artikelString = artikel.getText().toString();
                 String anzahlString = anzahl.getText().toString();
 
-                Snackbar.make(view, artikelString + " x " + anzahlString, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, anzahlString + " x " + artikelString, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 hinzufügen();
 
@@ -79,13 +79,13 @@ public class MainActivity extends AppCompatActivity
         myDB = new DatabaseHelper(this);
 
         // We expect a boolean value as response from the method called and save this to a local variable.
-        boolean isInserted = myDB.insertArticle(name);
-        if (isInserted == true) {
-            Log.i(TAG, "Data inserted.");
-        } else {
-
-            Log.i(TAG, "Data NOT inserted.");
-        }
+//        boolean isInserted = myDB.insertArticle(name);
+//        if (isInserted == true) {
+//            Log.i(TAG, "Data inserted.");
+//        } else {
+//
+//            Log.i(TAG, "Data NOT inserted.");
+//        }
 
     }
     public void hinzufügen(){
