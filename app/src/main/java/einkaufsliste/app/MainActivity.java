@@ -1,35 +1,36 @@
 package einkaufsliste.app;
 
-        import android.content.DialogInterface;
-        import android.os.Bundle;
-        import android.support.design.widget.FloatingActionButton;
-        import android.support.design.widget.Snackbar;
-        import android.support.v7.app.AlertDialog;
-        import android.text.Selection;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.support.design.widget.NavigationView;
-        import android.support.v4.view.GravityCompat;
-        import android.support.v4.widget.DrawerLayout;
-        import android.support.v7.app.ActionBarDrawerToggle;
-        import android.support.v7.app.AppCompatActivity;
-        import android.support.v7.widget.Toolbar;
-        import android.view.Menu;
-        import android.view.MenuItem;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.EditText;
-        import android.widget.ListAdapter;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
-        import java.util.ArrayList;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     List ekliste = new ArrayList<String>();
+    private static final String TAG = MainActivity.class.getSimpleName();
+    // Global database object.
+    DatabaseHelper myDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +40,22 @@ public class MainActivity extends AppCompatActivity
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+
+                // Grab contents of both EditText fields and transform them to Strings.
+                EditText anzahl = (EditText)findViewById(R.id.input_anzahl);
+                EditText artikel = (EditText)findViewById(R.id.input_artikel);
+                String artikelString = artikel.getText().toString();
+                String anzahlString = anzahl.getText().toString();
+
+                myDB.insertArticle(artikelString, Integer.parseInt(anzahlString));
+
+                Snackbar.make(view, anzahlString + " x " + artikelString, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 hinzufügen();
+
             }
         });
 
@@ -56,26 +68,47 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Initialization of globally available database object. Pass context of this MainActivity.
+        myDB = new DatabaseHelper(this);
+
     }
+
+    // Please provide translation.
     public void hinzufügen(){
-        EditText et1 = (EditText)findViewById(R.id.input_artikel);
-        EditText et2 = (EditText)findViewById(R.id.input_anzahl);
-        String s =  et2.getText().toString() + " x " + et1.getText().toString();
-        et2.setText("");
-        et1.setText("");
-        ekliste.add(s);
-        ListAdapter adapter = new ArrayAdapter(getApplicationContext(),R.layout.list_item_ekliste, R.id.list_item_ekliste_textview, ekliste);
-        ListView lv = (ListView)findViewById(R.id.ekliste);
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String ekinfo = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), ekinfo, Toast.LENGTH_LONG).show();
-            }
-        });
-        et1.setSelection(0);
+        // Clear current list before you populate it again.
+        ekliste.clear();
+        // Get the most recent and complete list of Items from the database.
+        List<Article> articleList = myDB.getArticleList();
+
+        for(Article article : articleList) {
+            Log.i(TAG, "Articles one by one: " + article.getArticleId() +
+                                         " - " + article.getArticleAmount() +
+                                         " x " + article.getArticleName() +
+                                  " created@ " + article.getArticleTimeAdded());
+            String listItem = article.getArticleAmount() + " x " + article.getArticleName();
+            ekliste.add(listItem);
+            ListAdapter adapter = new ArrayAdapter(getApplicationContext(),R.layout.list_item_ekliste, R.id.list_item_ekliste_textview, ekliste);
+            ListView lv = (ListView)findViewById(R.id.ekliste);
+            lv.setAdapter(adapter);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String ekinfo = (String) parent.getItemAtPosition(position);
+                    Toast.makeText(getApplicationContext(), ekinfo, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        // Instantiate both EditText fields.
+        EditText editTextArtikel = (EditText)findViewById(R.id.input_artikel);
+        EditText editTextAnzahl = (EditText)findViewById(R.id.input_anzahl);
+        // Clear contents of both EditText fields.
+        editTextAnzahl.setText("");
+        editTextArtikel.setText("");
+        // Loose focus, maybe?
+        editTextArtikel.setSelection(0);
     }
+    
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -2,8 +2,12 @@ package einkaufsliste.app;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -12,113 +16,76 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database tables.
     private static String articles = "articles";
-    private static String shoppinglists = "shoppinglists";
-    private static String shoppinglistItems = "shoppinglistItems";
 
     // Database table attributes.
-    private static String artId = "artId";
-    private static String artName = "artName";
-    private static String artComment = "artComment";
-    private static String artDateAdded = "artDateAdded";
-
-    private static String listId = "listId";
-    private static String listName = "listName";
-    private static String listPriceSum = "listPriceSum";
-    private static String listDateAdded = "listDateAdded";
-    private static String listFinished = "listFinished";
-    private static String listDateFinished = "listDateFinished";
-
-    private static String itemId = "itemId";
-    private static String itemAmount = "itemAmount";
-    private static String itemPrice = "itemPrice";
-    private static String itemDateAdded = "itemDateAdded";
-    private static String itemFinished = "itemFinished";
-    private static String itemDateFinished = "itemDateFinished";
+    private static String articleId = "articleId";
+    private static String articleName = "articleName";
+    private static String articleAmount = "articleAmount";
+    private static String articleTimeAdded = "articleTimeAdded";
 
     // Other.
     public static long unixTime;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
-//        SQLiteDatabase db = this.getWritableDatabase();
     }
 
     @Override
     public void onConfigure(SQLiteDatabase db) {
-        // this might only work since SQLite version 3.6.19 and respectively Android 2.2 Froyo.
-        db.execSQL("PRAGMA foreign_keys=ON");
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE table " +
                 articles + " (" +
-                artId + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                artName + " TEXT, " +
-                artComment + "TEXT, " +
-                artDateAdded + "INTEGER)"
+                articleId + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                articleName + " TEXT, " +
+                articleAmount + " INTEGER, " +
+                articleTimeAdded + " INTEGER)"
         );
-        db.execSQL("CREATE table " +
-                shoppinglists + " (" +
-                listId + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                listName + " TEXT, " +
-                listPriceSum + " REAL, " +
-                listDateAdded + " INTEGER, " +
-                listFinished + "INTEGER, " +
-                listDateFinished + " INTEGER)"
-        );
-        // Foreign keys??
-        db.execSQL("CREATE table " +
-                shoppinglistItems + " (" +
-                itemId + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                artId + " INTEGER NOT NULL, " +
-                listId + " INTEGER NOT NULL, " +
-                itemAmount + " REAL, " +
-                itemPrice + " REAL, " +
-                itemDateAdded + " INTEGER, " +
-                itemFinished + " INTEGER, " +
-                itemDateFinished + " INTEGER)"
-        );
-    }
+}
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + articles);
-        db.execSQL("DROP TABLE IF EXISTS " + shoppinglists);
-        db.execSQL("DROP TABLE IF EXISTS " + shoppinglistItems);
     }
 
-    public boolean insertArticle(String name) {
+    public void insertArticle(String name, int amount) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(artName, name);
-        long result = db.insert(articles, null, contentValues);
 
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        contentValues.put(articleName, name);
+        contentValues.put(articleAmount, amount);
+        contentValues.put(articleTimeAdded, getUnixTimeStamp());
+
+        db.insert(articles, null, contentValues);
     }
 
-//    public boolean insertShoppinglist(String name) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(artName, name);
-//        long result = db.insert(articles, null, contentValues);
-//
-//        if (result == -1) {
-//            return false;
-//        } else {
-//            return true;
-//        }
-//
-//    }
+    // Getting All Articles
+    public List<Article> getArticleList() {
+        List<Article> articleList = new ArrayList<Article>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + articles;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Article article = new Article();
+                article.setArticleId(Integer.parseInt(cursor.getString(0)));
+                article.setArticleName(cursor.getString(1));
+                article.setArticleAmount(Integer.parseInt(cursor.getString(2)));
+                article.setArticleTimeAdded(Long.parseLong(cursor.getString(3)));
+                // Adding contact to list
+                articleList.add(article);
+            } while (cursor.moveToNext());
+        }
+        // return contact list
+        return articleList;
+    }
 
-    public long getUnixTimeStamp() {
+    private long getUnixTimeStamp() {
         return unixTime = System.currentTimeMillis() / 1000L;
     }
-
 
 }
