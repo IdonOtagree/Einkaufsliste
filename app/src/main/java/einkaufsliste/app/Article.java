@@ -3,16 +3,18 @@ package einkaufsliste.app;
 public class Article {
 
     private String articleName;
-    private double articlePrice;
     private double articleAmount;
+    private double articleTimeAdded;
 
     /**
      * Default constructor
      *
-     * @param name
+     * @param
      */
-    public Article(String name) {
-        this.articleName = name;
+    public Article() {
+        this.articleName = articleName;
+        this.articleAmount = articleAmount;
+        this.articleTimeAdded = articleTimeAdded;
     }
 
     /**
@@ -28,13 +30,13 @@ public class Article {
 
     /**
      * Getter & Setter.
-     * @param price
+     * @param articleTimeAdded
      */
-    public void setArticlePrice(double price) {
-        this.articlePrice = price;
+    public void setArticleTimeAdded(double articleTimeAdded) {
+        this.articleTimeAdded = articleTimeAdded;
     }
-    public double getArticlePrice() {
-        return articlePrice;
+    public double getArticleTimeAdded() {
+        return articleTimeAdded;
     }
 
     /**

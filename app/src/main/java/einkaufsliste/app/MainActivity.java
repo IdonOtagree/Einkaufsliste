@@ -3,6 +3,7 @@ package einkaufsliste.app;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     List ekliste = new ArrayList<String>();
+    private static final String TAG = MainActivity.class.getSimpleName();
     // Global database object.
     DatabaseHelper myDB;
 
@@ -70,6 +72,13 @@ public class MainActivity extends AppCompatActivity
 
     }
     public void hinzufügen(){
+
+        List<Article> articleList = myDB.getArticleList();
+
+        for(Article article : articleList) {
+            Log.i(TAG, "Articles one by one: " + article.getArticleName());
+        }
+
         EditText et1 = (EditText)findViewById(R.id.input_artikel);
         EditText et2 = (EditText)findViewById(R.id.input_anzahl);
         String s = et1.getText().toString() + "     Anzahl:  " + et2.getText();
