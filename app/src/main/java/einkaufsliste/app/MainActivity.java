@@ -1,13 +1,8 @@
 package einkaufsliste.app;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.text.Selection;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,12 +26,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     List ekliste = new ArrayList<String>();
-    // Tag for Logging.
-    private static final String TAG = "MainActivity";
     // Global database object.
     DatabaseHelper myDB;
-    // Mock data
-    String name = "Birne";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +52,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
                 hinzufügen();
 
-                myDB.insertArticle(artikelString);
+                myDB.insertArticle(artikelString, Integer.parseInt(anzahlString));
             }
         });
 
@@ -77,15 +67,6 @@ public class MainActivity extends AppCompatActivity
 
         // Initialization of globally available database object. Pass context of this MainActivity.
         myDB = new DatabaseHelper(this);
-
-        // We expect a boolean value as response from the method called and save this to a local variable.
-//        boolean isInserted = myDB.insertArticle(name);
-//        if (isInserted == true) {
-//            Log.i(TAG, "Data inserted.");
-//        } else {
-//
-//            Log.i(TAG, "Data NOT inserted.");
-//        }
 
     }
     public void hinzufügen(){
