@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    // Database.
+    // Database name.
     public static String DATABASE_NAME = "ShoppingList.db";
 
     // Database tables.
@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static String articleAmount = "articleAmount";
     private static String articleTimeAdded = "articleTimeAdded";
 
-    // Other.
+    // Unix timestamp variable.
     public static long unixTime;
 
     public DatabaseHelper(Context context) {
@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 articleAmount + " INTEGER, " +
                 articleTimeAdded + " INTEGER)"
         );
-}
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -61,14 +61,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(articles, null, contentValues);
     }
 
-    // Getting All Articles
+    // Getting All Articles.
     public List<Article> getArticleList() {
         List<Article> articleList = new ArrayList<Article>();
-        // Select All Query
+        // Select All Query.
         String selectQuery = "SELECT * FROM " + articles;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-        // looping through all rows and adding to list
+        // Looping through all rows and adding to list.
         if (cursor.moveToFirst()) {
             do {
                 Article article = new Article();
@@ -76,16 +76,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 article.setArticleName(cursor.getString(1));
                 article.setArticleAmount(Integer.parseInt(cursor.getString(2)));
                 article.setArticleTimeAdded(Long.parseLong(cursor.getString(3)));
-                // Adding contact to list
+                // Adding contact to list.
                 articleList.add(article);
             } while (cursor.moveToNext());
         }
-        // return contact list
+        // Return contact list.
         return articleList;
     }
 
     private long getUnixTimeStamp() {
         return unixTime = System.currentTimeMillis() / 1000L;
     }
-
 }

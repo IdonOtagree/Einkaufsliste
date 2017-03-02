@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity
         // Loose focus, maybe?
         editTextArtikel.setSelection(0);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
